@@ -36,3 +36,11 @@ class HTMLPreview(MyWidget):
     srcdoc = flx.StringProp('', settable=True)
     def _create_dom(self):
         return flx.create_element('iframe', {'srcdoc':self.srcdoc})
+
+
+class FileInput(MyWidget):
+    '''iframe with srcdoc instead of src support'''
+    #srcdoc = flx.StringProp('', settable=True)
+    def _create_dom(self):
+        return flx.create_element('input', {'type': 'file'})
+
