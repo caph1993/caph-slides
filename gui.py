@@ -138,7 +138,7 @@ class MyApp(flx.PyComponent):
         while not self.js.ready:
             await asyncio.sleep(50e-3)
         self.js.set_editor('Select a file to start')
-        self.js.set_preview('<h1>🤪</h1>')
+        self.js.set_preview('<h1 style="text-align:center">🤪</h1>')
         self.js.set_source('Choose slides file...')
         return
 
