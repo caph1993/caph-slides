@@ -23,6 +23,9 @@ class MyApp_JS(MyWidget):
         color: #fff;
         border: none;
     }
+    .flx-Button:hover {
+        background-color: #888;
+    }
     .flx-CodeEditor {
         height: 100%;
     }

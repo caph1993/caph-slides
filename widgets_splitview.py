@@ -1,9 +1,30 @@
 from flexx import flx
 from widgets_std import MyWidget
+import os
 
-#url = "https://unpkg.com/split-grid/dist/split-grid.js"
-url = "https://unpkg.com/split.js/dist/split.min.js"
-flx.assets.associate_asset(__name__, url)
+HERE = os.path.dirname(__file__)
+
+def imports():
+    sources = {
+        'split.js': {
+            'cdn': 'https://unpkg.com/split.js/dist/split.min.js',
+            'local': ('assets_js', 'split.min.js'),
+        },
+    }
+    for key, value in sources.items():
+        if 'local' in value:
+            path = os.path.join(HERE, *value['local'])
+            with open(path) as f:
+                content = f.read()
+            flx.assets.associate_asset(__name__, key, content)
+        else:
+            url = value['cdn']
+            print('Pulling cdn: ', url)
+            flx.assets.associate_asset(__name__, url)
+    return
+
+imports()
+
 
 class SBox(MyWidget):
     CSS='''
@@ -16,7 +37,6 @@ class SBox(MyWidget):
     }
     .split-child {
         border: 1px solid #8888;
-        box-shadow: inset 0 1px 2px #e4e4e4;
     }
     .gutter {
         background-color: transparent;
