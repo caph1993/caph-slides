@@ -25,20 +25,21 @@ function sleep(ms){
   return new Promise((ok,err)=>setTimeout(ok, ms));
 }
 function all_true(arr){
-  return arr.reduce(((p,c)=>p&&c), true) || false;
+  for(let x of arr) if(!x) return false;
+  return true;
 }
 function any_true(arr){
-  return arr.reduce(((p,c)=>p||c), false) && true;
+  for(let x of arr) if(x) return true;
+  return false;
 }
-
-async function DOM_insert_after(new_element, element){
-  const parent = element.parentNode;
-  new_element.id = new_element.id || '#new_elem'+Math.random();
-  element.insertAdjacentElement('afterend', new_element);
-  
-  await sleep(300); // I NEED A BETTER CODE HERE...
-  // Wait until the selector for element is 'stable'
-
+function arraysEqual(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length !== b.length) return false;
+  for(let i=0; i<a.length; ++i){
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
 }
 
 class SlidesCore{
@@ -123,11 +124,22 @@ class SlidesCore{
       await Promise.all(elements.map(async e =>{
         let loader = document.createElement('div');
         css_loader.split(' ').map(s=>loader.classList.add(s));
-        await DOM_insert_after(loader, e);
+        e.insertAdjacentElement('afterend', loader);
         e.hidden = true;
         return;
       }));
-      
+
+      // Wait for selector to change and then to stabilize
+      while(arraysEqual(elements, get_elems(css_class))){
+        elements = get_elems(css_class);
+        await sleep(10);
+      }
+      await sleep(10);
+      while(!arraysEqual(elements, get_elems(css_class))){
+        elements = get_elems(css_class);
+        await sleep(10);
+      }
+
       try{
         // Import scripts and styles
         if(get_elems(css_class).length){

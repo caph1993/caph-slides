@@ -57,10 +57,9 @@ class SlidesClass extends SlidesCore{
     });
   }
   async parse_random_bit(container){
-    await sleep(100+500*Math.random());
+    await sleep(100+1500*Math.random());
     let bit=Math.trunc(Math.random()*2)
     container.innerText = ''+bit;
-    //console.log(container);
   }
   async parse_graphviz(container){
     let text = container.innerText;
