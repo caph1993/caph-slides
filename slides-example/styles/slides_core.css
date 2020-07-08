@@ -1,6 +1,9 @@
 .hbox{ display: flex; }
 .vbox{ display: flex; flex-direction: column; }
 .flex{ flex: 1; }
+.box-shadow{
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}
 
 div .parser-loading{
   border: 5px solid #f3f3f3;

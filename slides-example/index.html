@@ -6,8 +6,8 @@
     <title>Slides demo</title>
     <script src="scripts/slides_core.js"></script>
     <link rel="stylesheet" href="styles/slides_core.css">
-    
-    <link rel="stylesheet" href="styles/reveal.js-themes/white.css" id='theme'>
+
+    <link rel="stylesheet" href="styles/reveal.js-themes/simple.css" id='theme'>
     <link rel="stylesheet" href="styles/reveal.js-hthemes/monokai.css" id='highlight-theme'>
     <script src="scripts/slides_custom.js"></script>
     <link rel="stylesheet" href="styles/slides_custom.css">
@@ -28,10 +28,10 @@
           <h2>Slide 2</h2>
           <p>Custom stuff like...</p>
           <div>
-            <span>Print 3 random numbers:</span>
-            <span class="random-example">x</span>
-            <span class="random-example">x</span>
-            <span class="random-example">x</span>
+            <span>Print 3 random bits:</span>
+            <span class="random-bit">?</span>
+            <span class="random-bit">?</span>
+            <span class="random-bit">?</span>
           </div>
           <p>Graphviz...</p>
           <div class="graphviz">
@@ -47,15 +47,96 @@
           </div>
         </section>
 
+
         <section>
           <h2>Slide 3</h2>
-          <pre class="python"><code data-trim data-noescape>
+          <pre><code data-trim data-noescape>
           def f(*args):
             for i in range(5):
               print('s')
             return None
           </code></pre>
         </section>
+
+
+        <section>
+          <h2>Fabric.js</h2>
+          <script class="fabric box-shadow" id="myId">
+          function fabric_myId(canvas){
+            var rect = new fabric.Rect({
+              left: 100,
+              top: 100,
+              fill: 'red',
+              opacity: 0.5,
+              width: 20,
+              height: 20,
+            });
+            canvas.add(rect);
+          }
+          </script>
+        </section>
+
+
+        <section>
+          <h2>D3 charts</h2>
+
+          <script class="d3" id="histogram1">
+          async function d3_histogram1(div){
+            // set the dimensions and margins of the graph
+            var margin = {top: 10, right: 30, bottom: 30, left: 40},
+                width = 460 - margin.left - margin.right,
+                height = 400 - margin.top - margin.bottom;
+
+            // append the svg object to the body of the page
+            var svg = div
+              .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+                .attr("transform",
+                      "translate(" + margin.left + "," + margin.top + ")");
+            // get the data
+            let data = await d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/1_OneNum.csv");
+
+            // X axis: scale and draw:
+            var x = d3.scaleLinear()
+                .domain([0, 1000])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+                .range([0, width]);
+            svg.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x));
+
+            // set the parameters for the histogram
+            var histogram = d3.histogram()
+                .value(function(d) { return d.price; })   // I need to give the vector of value
+                .domain(x.domain())  // then the domain of the graphic
+                .thresholds(x.ticks(70)); // then the numbers of bins
+
+            // And apply this function to data to get the bins
+            var bins = histogram(data);
+
+            // Y axis: scale and draw:
+            var y = d3.scaleLinear()
+                .range([height, 0]);
+                y.domain([0, d3.max(bins, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
+            svg.append("g")
+                .call(d3.axisLeft(y));
+
+            // append the bar rectangles to the svg element
+            svg.selectAll("rect")
+                .data(bins)
+                .enter()
+                .append("rect")
+                  .attr("x", 1)
+                  .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+                  .attr("width", function(d) { return x(d.x1) - x(d.x0) -1 ; })
+                  .attr("height", function(d) { return height - y(d.length); })
+                  .style("fill", "#69b3a2")
+            return;
+          }
+          </script>
+        </section>
+
 
       </div>
     </div>
