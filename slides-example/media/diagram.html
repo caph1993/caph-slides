@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <style type="text/css">
+    .mermaid{
+      width: 100%;
+      text-align: center;
+    }
+    .mermaid svg{
+      display:inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="mermaid">
+    graph TD;
+
+      X[Fairness notions] --> XX([Intersectionallity or masking likely?])
+      XX -->|No, group fairness| N([Law standard available? or<br>No ground truth?])      
+      XX -->|Yes, individual fairness| Y([Metric available?<br>Explaining variables?<br>Proxies?])
+      
+      Y --> YX[Causal discrimination<br>No proxies<br>Fairness through awareness]
+      N -->|No| NN([Precision or recall?<br>Variable thresholds?])
+      N -->|Yes| NY[Statistical parity]
+      NN --> NNX[Confusion matrix notions:<br>Equalize odds<br>Balance<br>Accuracy equality<br>Etc.]
+
+      classDef leaves fill:#fea;
+      class NY,NNX,YX leaves;
+      classDef title fill:#efa;
+      class X title;
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.5.2/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true});</script>
+</body>
+</html> 

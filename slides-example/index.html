@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Slides demo</title>
+    <script src="scripts/slides_core.js"></script>
+    <link rel="stylesheet" href="styles/slides_core.css">
+    
+    <link rel="stylesheet" href="styles/reveal.js-themes/white.css" id='theme'>
+    <link rel="stylesheet" href="styles/reveal.js-hthemes/monokai.css" id='highlight-theme'>
+    <script src="scripts/slides_custom.js"></script>
+    <link rel="stylesheet" href="styles/slides_custom.css">
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+        <section>
+          <h1>Demo of reveal.js</h1>
+          <p>Several plugins are inlcuded with this demo.</p>
+          <p>Math works with $\KaTeX$.</p>
+          Inline formulas $e^{i\pi}+1 = 0$ and independent ones
+          $$\int_{-\infty}^\infty e^{-x^2/2}\ dx=\sqrt{2\pi}$$
+        </section>
+        
+        <section>
+          <h2>Slide 2</h2>
+          <p>Custom stuff like...</p>
+          <div>
+            <span>Print 3 random numbers:</span>
+            <span class="random-example">x</span>
+            <span class="random-example">x</span>
+            <span class="random-example">x</span>
+          </div>
+          <p>Graphviz...</p>
+          <div class="graphviz">
+            digraph D {
+              A [shape=diamond]
+              B [shape=box]
+              C [shape=circle]
+
+              A -> B [style=dashed, color=grey]
+              A -> C [color="black:invis:black"]
+              A -> D [penwidth=5, arrowhead=none]
+            }
+          </div>
+        </section>
+
+        <section>
+          <h2>Slide 3</h2>
+          <pre class="python"><code data-trim data-noescape>
+          def f(*args):
+            for i in range(5):
+              print('s')
+            return None
+          </code></pre>
+        </section>
+
+      </div>
+    </div>
+  </body>
+</html>

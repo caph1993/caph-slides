@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <style type="text/css">
+    .mermaid{
+      width: 100%;
+      text-align: center;
+    }
+    .mermaid svg{
+      display:inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="mermaid">
+    graph TD
+      X[Individual fairness notions]
+      X --> XX([Choose an option])
+      XX -->|Distance metric available?| A[Fairness through awareness]
+      XX -->|Causal graph available?| B([Explaining variables?])
+      XX -->|None?| C["Causal discrimination :("]
+      B -->|Yes| BY[No unresolved discrimination]
+      B -->|No| BN([Potental proxies?])
+      BN -->|No| BNN[Counterfactual]
+      BN -->|Yes| BNY[No proxy discrimination]
+
+      classDef leaves fill:#fea;
+      class BNN,BNY,BY,C,A leaves;
+      classDef title fill:#efa;
+      class X title;
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.5.2/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true});</script>
+</body>
+</html> 

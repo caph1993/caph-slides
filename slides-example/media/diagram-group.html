@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <style type="text/css">
+    .mermaid{
+      width: 100%;
+      text-align: center;
+    }
+    .mermaid svg{
+      display:inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="mermaid">
+    graph TD
+      X[Group fairness notions]
+      X --> XX([Law standard exists?])
+      XX -->|No| N([Ground truth available?])
+      XX -->|Yes| Y[Statistical parity]
+      N -->|No| NN[Statistical parity<br>Conditional stat. par.]
+      N -->|Yes| NY([Precision over recall?])
+      NY -->|No, separation| NYN([Score or boolean?<br>FP over FN?])
+      NY -->|Yes, sufficiency| NYY([Score or boolean?<br>FP over FN?])
+      NYN --> NYNX[Equalize odds<br>Equal opportunity<br>Predictive equality<br>Balance]
+      NYY --> NYYX[Cond. use accuracy equality<br>Predictive parity<br>Calibration]
+
+      classDef leaves fill:#fea;
+      class Y,NN,NYYX,NYNX leaves;
+      classDef title fill:#efa;
+      class X title;
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.5.2/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true});</script>
+</body>
+</html> 
