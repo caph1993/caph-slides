@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Slides demo</title>
     <script src="scripts/slides_core.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="styles/slides_core.css">
 
     <link rel="stylesheet" href="styles/reveal.js-themes/simple.css" id='theme'>
@@ -12,19 +13,21 @@
     <script src="scripts/slides_custom.js"></script>
     <link rel="stylesheet" href="styles/slides_custom.css">
   </head>
-  <body>
+  <body class="fabric-whiteboard">
     <div class="reveal">
       <div class="slides">
-
+        
         <section>
-          <h1>Demo of reveal.js</h1>
-          <p>Several plugins are inlcuded with this demo.</p>
           <p>Math works with $\KaTeX$.</p>
           Inline formulas $e^{i\pi}+1 = 0$ and independent ones
           $$\int_{-\infty}^\infty e^{-x^2/2}\ dx=\sqrt{2\pi}$$
         </section>
-        
+
         <section>
+          :)
+        </section>
+        
+        <!--section>
           <h2>Slide 2</h2>
           <p>Custom stuff like...</p>
           <div>
@@ -84,8 +87,8 @@
           async function d3_histogram1(div){
             // set the dimensions and margins of the graph
             var margin = {top: 10, right: 30, bottom: 30, left: 40},
-                width = 460 - margin.left - margin.right,
-                height = 400 - margin.top - margin.bottom;
+                width = 600 - margin.left - margin.right,
+                height = 250 - margin.top - margin.bottom;
 
             // append the svg object to the body of the page
             var svg = div
@@ -135,7 +138,7 @@
             return;
           }
           </script>
-        </section>
+        </section-->
 
 
       </div>

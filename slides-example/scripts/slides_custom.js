@@ -1,4 +1,5 @@
 
+
 class SlidesClass extends SlidesCore{
 
   async init(){
@@ -19,10 +20,15 @@ class SlidesClass extends SlidesCore{
             src: 'libraries/reveal.js-math-katex-plugin/math-katex.js',
             async: true,
           },
+          //{ src: 'libraries/reveal.js-rajgoel-plugins/chalkboard/chalkboard.js' },
       ],
       math:{
         katexScript:     'libraries/katex/katex.min.js',
         katexStylesheet: 'libraries/katex/katex.min.css'
+      },
+      keyboard: {
+        // Check codes here https://keycode.info/
+         8: ()=> console.log('key pressed'),
       },
       custom_parsers: [ // Scripts are not loaded if not used :)
         {
@@ -53,6 +59,20 @@ class SlidesClass extends SlidesCore{
             'libraries/d3/d3.v5.min.js',
           ],
         },
+        {
+          css_class: "fabric-whiteboard",
+          parser: async (c)=>{
+            await FabricWhiteboard.init(c);
+          },
+          scripts: [
+            //'libraries/reveal.js-rajgoel-plugins/chalkboard/chalkboard.js',
+            'libraries/fabric/fabric.js',
+            'libraries/fabric-whiteboard/fabric-whiteboard.js',
+          ],
+          styles: [
+            'libraries/fabric-whiteboard/fabric-whiteboard.css',
+          ]
+        },
       ]
     });
   }
@@ -76,7 +96,7 @@ class SlidesClass extends SlidesCore{
     assert(f && container.text.search(f_name)!=-1,
       'Expected function '+f_name+' no found in script of #'+container.id);
     let canvas = document.createElement('canvas');
-    container.parentNode.insertBefore(canvas, container.nextSibling);
+    container.insertAdjacentElement('afterend', canvas);
     container.classList.forEach(s=>canvas.classList.add(s))
     let fabric_canvas = new fabric.Canvas(canvas);
     return await f(fabric_canvas);
@@ -89,7 +109,7 @@ class SlidesClass extends SlidesCore{
     assert(f && container.text.search(f_name)!=-1,
       'Expected function '+f_name+' no found in script of #'+container.id);
     let div = document.createElement('div');
-    container.parentNode.insertBefore(div, container.nextSibling);
+    container.insertAdjacentElement('afterend', div);
     container.classList.forEach(s=>div.classList.add(s))
     let d3_div = d3.select(div);
     return await f(d3_div);

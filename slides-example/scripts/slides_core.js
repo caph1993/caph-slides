@@ -57,7 +57,7 @@ class SlidesCore{
     this.already = true;
     await this.load_script(this.dist+'reveal.js');
     if(Reveal.isReady()) this._on_reveal_ready();
-    else Reveal.on('ready', (e)=>this._on_reveal_ready());
+    else Reveal.on('ready', (e)=> this._on_reveal_ready());
     this.init();
   }
   
@@ -106,6 +106,11 @@ class SlidesCore{
   };
 
   async _on_reveal_ready(){
+    try{ await this.__on_reveal_ready(); }
+    finally{ Reveal.sync(); }
+  }
+
+  async __on_reveal_ready(){
     // Parse custom css_classes
     const get_elems = (s)=>[...document.getElementsByClassName(s)];
     const custom_parsers = Reveal.getConfig().custom_parsers;
@@ -118,9 +123,10 @@ class SlidesCore{
       
       // Create loaders in DOM
       const css_loader = 'parser-loading tmp-'+css_class;
-      let elements = get_elems(css_class);
+      const elements = get_elems(css_class);
+      if(!elements.length) return;
 
-      let ploaders = []
+      let all_diff = (a,b) => all_true(a.map((_,i)=>a[i]!=b[i]));
       await Promise.all(elements.map(async e =>{
         let loader = document.createElement('div');
         css_loader.split(' ').map(s=>loader.classList.add(s));
@@ -128,23 +134,21 @@ class SlidesCore{
         e.hidden = true;
         return;
       }));
-
-      // Wait for selector to change and then to stabilize
-      while(arraysEqual(elements, get_elems(css_class))){
-        elements = get_elems(css_class);
-        await sleep(10);
-      }
-      await sleep(10);
-      while(!arraysEqual(elements, get_elems(css_class))){
-        elements = get_elems(css_class);
-        await sleep(10);
-      }
+      
+      // Wait for elements query to update (this is weird but necessary)
+      const ready = () => all_diff(elements, get_elems(css_class));
+      try{
+        await Promise.all([
+          (async ()=>{ await sleep(1500); throw 'Timeout'; })(),
+          (async ()=>{ while(!ready()) await sleep(5); })(),
+        ]);
+      } catch(e){ if(e!='Timeout') throw e; }
 
       try{
-        // Import scripts and styles
+        // Import scripts and styles in series (dependency order)
         if(get_elems(css_class).length){
-          await Promise.all(styles.map(src=> this.load_style(src)));
-          await Promise.all(scripts.map(src=> this.load_script(src)));
+          for(let src of styles){await this.load_style(src)};
+          for(let src of scripts){await this.load_script(src)};
         }
         // Run parser functions and clear loaders
         await Promise_finish_all(get_elems(css_class).map(async (e) =>{
@@ -163,4 +167,29 @@ class SlidesCore{
       }
     }));
   }
+}
+
+
+var KEY_CODES = {
+  "0": 48, "1": 49, "2": 50, "3": 51, "4": 52,
+  "5": 53, "6": 54, "7": 55, "8": 56, "9": 57, "backspace": 8,
+  "tab": 9, "enter": 13, "shift": 16, "ctrl": 17, "alt": 18,
+  "pause_break": 19, "caps_lock": 20, "escape": 27, "page_up": 33,
+  "page_down": 34, "end": 35, "home": 36, "left_arrow": 37,
+  "up_arrow": 38, "right_arrow": 39, "down_arrow": 40, "insert": 45,
+  "delete": 46, "a": 65, "b": 66, "c": 67, "d": 68, "e": 69, "f": 70,
+  "g": 71, "h": 72, "i": 73, "j": 74, "k": 75, "l": 76, "m": 77,
+  "n": 78, "o": 79, "p": 80, "q": 81, "r": 82, "s": 83, "t": 84,
+  "u": 85, "v": 86, "w": 87, "x": 88, "y": 89, "z": 90,
+  "left_window_key": 91, "right_window_key": 92, "select_key": 93,
+  "numpad_0": 96, "numpad_1": 97, "numpad_2": 98, "numpad_3": 99,
+  "numpad_4": 100, "numpad_5": 101, "numpad_6": 102, "numpad_7": 103,
+  "numpad_8": 104, "numpad_9": 105, "multiply": 106, "add": 107,
+  "subtract": 109, "decimal_point": 110, "divide": 111,
+  "f1": 112, "f2": 113, "f3": 114, "f4": 115, "f5": 116, "f6": 117,
+  "f7": 118, "f8": 119, "f9": 120, "f10": 121, "f11": 122, "f12": 123,
+  "num_lock": 144, "scroll_lock": 145, "semi_colon": 186,
+  "equal_sign": 187, "comma": 188, "dash": 189, "period": 190,
+  "forward_slash": 191, "grave_accent": 192, "open_bracket": 219,
+  "back_slash": 220, "close_braket": 221, "single_quote": 222
 }
