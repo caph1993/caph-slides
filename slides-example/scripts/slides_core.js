@@ -131,7 +131,7 @@ class SlidesCore{
         let loader = document.createElement('div');
         css_loader.split(' ').map(s=>loader.classList.add(s));
         e.insertAdjacentElement('afterend', loader);
-        e.hidden = true;
+        if(e.tagName!='BODY') e.hidden = true;
         return;
       }));
       

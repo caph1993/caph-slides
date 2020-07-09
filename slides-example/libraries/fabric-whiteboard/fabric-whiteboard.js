@@ -1,22 +1,21 @@
 
 class FabricWhiteboardClass{
-  constructor(){
+  constructor(hidden=true){
     this.loaded = {};
     this.already = false;
-    this.hidden = true;
+    this.hidden = hidden;
   }
   async init(container){
     if(this.already) return;
     this.already=true;
-    //if(container.tagName!='div') return;
     let dropdown = document.createElement('div', {id:'#whiteboard-main'});
+    dropdown.classList.add('whiteboard-dropdown');
     container.appendChild(dropdown);
 
     let main = document.createElement('div', {id:'#whiteboard-main'});
-    dropdown.classList.add('whiteboard-dropdown');
+    main.hidden = this.hidden;
     main.classList.add('whiteboard-main');
     main.innerHTML = this.controlsHTML;
-    main.hidden = this.hidden;
     dropdown.addEventListener('click', ()=>{
       main.hidden = this.hidden = !this.hidden;
       if(!this.hidden) dropdown.classList.add('whiteboard-dropdown-shown');
@@ -33,9 +32,8 @@ class FabricWhiteboardClass{
   <div id="whiteboard-background" class="whiteboard-background"></div>
   <div id="whiteboard-controls" class="whiteboard-controls hbox">
     <button id="clear-canvas" class="btn btn-info">Clear</button>
-    <button id="drawing-mode" class="btn btn-info">Edit</button>
+    <button id="drawing-mode" class="btn btn-info">🖱</button>
     <div id="drawing-mode-options" class="hbox">
-      🖉
       <select id="drawing-mode-selector">
         <option>Pencil</option>
         <option>Circle</option>
@@ -51,10 +49,8 @@ class FabricWhiteboardClass{
       <input type="color" value="#005E7A" id="drawing-color">
       <input type="range" value="50" min="0" max="150" id="drawing-line-width">
       ❏
-      <input type="color" value="#005E7A" id="drawing-shadow-color">
       <input type="range" value="10" min="2" max="50" id="drawing-shadow-width">
 
-      <input hidden type="range" value="0" min="0" max="50" id="drawing-shadow-offset">
     </div>
   </div>
   `;
@@ -84,10 +80,8 @@ class FabricWhiteboardClass{
     var drawingModeEl = $('drawing-mode'),
         drawingOptionsEl = $('drawing-mode-options'),
         drawingColorEl = $('drawing-color'),
-        drawingShadowColorEl = $('drawing-shadow-color'),
         drawingLineWidthEl = $('drawing-line-width'),
         drawingShadowWidth = $('drawing-shadow-width'),
-        drawingShadowOffset = $('drawing-shadow-offset'),
         clearEl = $('clear-canvas');
 
     const get_color = (e)=>this.add_alpha(e.value, 0.5);
@@ -98,11 +92,11 @@ class FabricWhiteboardClass{
     drawingModeEl.onclick = function() {
       canvas.isDrawingMode = !canvas.isDrawingMode;
       if (canvas.isDrawingMode) {
-        drawingModeEl.innerHTML = 'Draw';
+        drawingModeEl.innerHTML = '🖱';
         drawingOptionsEl.style.display = '';
       }
       else {
-        drawingModeEl.innerHTML = 'Edit';
+        drawingModeEl.innerHTML = '🖉';
         drawingOptionsEl.style.display = 'none';
       }
     };
@@ -213,15 +207,13 @@ class FabricWhiteboardClass{
           offsetX: 0,
           offsetY: 0,
           affectStroke: true,
-          color: this.add_alpha(drawingShadowColorEl.value, 0.5),
+          color: drawingColorEl.value,
         });
       }
     };
 
     drawingColorEl.onchange = function() {
       canvas.freeDrawingBrush.color = get_color(this);
-    };
-    drawingShadowColorEl.onchange = function() {
       canvas.freeDrawingBrush.shadow.color = this.value;
     };
     drawingLineWidthEl.onchange = function() {
@@ -229,11 +221,6 @@ class FabricWhiteboardClass{
     };
     drawingShadowWidth.onchange = function() {
       canvas.freeDrawingBrush.shadow.blur = this.value;
-    };
-    drawingShadowOffset.onchange = function() {
-      canvas.freeDrawingBrush.shadow.offsetX = parseInt(this.value, 10) || 0;
-      canvas.freeDrawingBrush.shadow.offsetY = parseInt(this.value, 10) || 0;
-      this.previousSibling.innerHTML = this.value;
     };
 
     if (canvas.freeDrawingBrush) {
@@ -244,7 +231,7 @@ class FabricWhiteboardClass{
         offsetX: 0,
         offsetY: 0,
         affectStroke: true,
-        color: drawingShadowColorEl.value,
+        color: drawingColorEl.value,
       });
     }
 

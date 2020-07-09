@@ -1,4 +1,3 @@
-
 .whiteboard-dropdown{
   width: 1.5em;
   height: 1.5em;
@@ -48,5 +47,5 @@
   position: fixed;
   z-index: 100;
   background: green;
-  opacity: 0.05;
+  opacity: 0.01;
 }
