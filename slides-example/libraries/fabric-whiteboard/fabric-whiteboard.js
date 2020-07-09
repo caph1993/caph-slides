@@ -71,6 +71,7 @@ class FabricWhiteboardClass{
     return out;
   }
 
+
   whiteboard_init() {
     var $ = function(id){ return document.getElementById(id); };
 
@@ -246,6 +247,14 @@ class FabricWhiteboardClass{
         color: drawingShadowColorEl.value,
       });
     }
+
+    document.addEventListener('keydown', (e)=>{
+      if(this.hidden) return;
+      if(e.keyCode == 46) {
+        this.__canvas.getActiveObjects().forEach((obj) => this.__canvas.remove(obj));
+        this.__canvas.discardActiveObject().renderAll()
+      }
+    });
     return canvas;
   }
 }
