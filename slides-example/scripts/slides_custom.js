@@ -61,9 +61,7 @@ class SlidesClass extends SlidesCore{
         },
         {
           css_class: "fabric-whiteboard",
-          parser: async (c)=>{
-            await FabricWhiteboard.init(c);
-          },
+          parser: async (c)=>(await FabricWhiteboard.init(c)),
           scripts: [
             //'libraries/reveal.js-rajgoel-plugins/chalkboard/chalkboard.js',
             'libraries/fabric/fabric.js',
